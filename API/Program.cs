@@ -9,10 +9,15 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
 {
     opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+builder.Services.AddCors();
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod()
+    .AllowCredentials()
+    .WithOrigins("http://localhost:3000", "https://localhost:3000", "http://localhost:5000", "https://localhost:5001"));
+
 app.MapControllers();
 
 using var scope = app.Services.CreateScope();
@@ -22,7 +27,7 @@ try
 {
     var context = services.GetRequiredService<AppDbContext>();
     await context.Database.MigrateAsync();
-    await DbInitializer.SeedData(context);      
+    await DbInitializer.SeedData(context);
 }
 catch (Exception ex)
 {
