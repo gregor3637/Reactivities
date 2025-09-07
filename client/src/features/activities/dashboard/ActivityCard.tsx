@@ -1,56 +1,88 @@
+import { AccessTime, Place } from "@mui/icons-material";
 import {
   Card,
   CardContent,
-  CardActions,
   Chip,
   Button,
   Box,
+  CardHeader,
+  Avatar,
+  Divider,
 } from "@mui/material";
 import { Typography } from "@mui/material";
-import { useActivities } from "../../../lib/types/hooks/useActivities";
 import { Link } from "react-router";
+import { formatDate } from "../../../lib/util/util";
 
 type Props = {
   activity: Activity;
 };
 function ActivityCard({ activity }: Props) {
-  const { deleteActivity } = useActivities();
+  const isHost = false;
+  const isGoing = false;
+  const label = isHost ? "You are hosting" : "You are going";
+  const isCancelled = false;
+  const color = isHost ? "secondary" : isGoing ? "warning" : "default";
+
   return (
-    <Card sx={{ borderRadius: 3 }}>
-      <CardContent>
-        <Typography variant="h5">{activity.title}</Typography>
-        <Typography sx={{ color: "text.secondary", mb: 1 }}>
-          {activity.date}
-        </Typography>
-        <Typography variant="body2">{activity.description}</Typography>
-        <Typography variant="subtitle1">
-          {activity.city} / {activity.venue}
-        </Typography>
-      </CardContent>
-      <CardActions
-        sx={{ display: "flex", justifyContent: "space-between", pb: 2 }}
-      >
-        <Chip label={activity.category} variant="outlined" />
-        <Box display="flex" gap={3}>
-          <Button
-            variant="contained"
-            size="medium"
-            component={Link}
-            to={`/activities/${activity.id}`}
-          >
-            View
-          </Button>
-          <Button
-            variant="contained"
-            size="medium"
-            color="error"
-            onClick={() => deleteActivity.mutate(activity.id)}
-            disabled={deleteActivity.isPending}
-          >
-            Delete
-          </Button>
+    <Card elevation={3} sx={{ borderRadius: 3 }}>
+      <Box display="flex" alignItems="center" justifyContent="space-between">
+        <CardHeader
+          avatar={<Avatar sx={{ height: 80, width: 80 }} />}
+          title={activity.title}
+          titleTypographyProps={{
+            fontWeight: "bold",
+            fontSize: 20,
+          }}
+          subheader={
+            <>
+              Hosted by <Link to={`/profiles/bob`}>Bob</Link>
+            </>
+          }
+        />
+        <Box display="flex" flexDirection="column" gap={2} mr={2}>
+          {(isHost || isGoing) && (
+            <Chip label={label} color={color} sx={{ borderRadius: 2 }} />
+          )}
+          {isCancelled && (
+            <Chip label="Cancelled" color="error" sx={{ borderRadius: 2 }} />
+          )}
         </Box>
-      </CardActions>
+      </Box>
+
+      <Divider sx={{ mb: 3 }} />
+      <CardContent sx={{ p: 0 }} />
+      <Box display="flex" alignItems="center" mb={2} px={2}>
+        <Box display="flex" flexGrow={0} alignItems="center">
+          <AccessTime sx={{ mr: 1 }} />
+          <Typography variant="body2" noWrap>
+            {formatDate(activity.date)}
+          </Typography>
+        </Box>
+        <Place sx={{ ml: 3, mr: 1 }} />
+        <Typography variant="body2">{activity.venue}</Typography>
+      </Box>
+      <Divider />
+      <Box
+        display="flex"
+        gap={2}
+        sx={{ backgroundColor: "grey.200", py: 3, pl: 3 }}
+      >
+        Atendees go here
+      </Box>
+
+      <CardContent></CardContent>
+      <CardContent sx={{ pb: 2 }}>
+        <Typography variant="body2">{activity.description}</Typography>
+        <Button
+          variant="contained"
+          to={`/activities/${activity.id}`}
+          size="medium"
+          component={Link}
+          sx={{ display: "fkex", justifySelf: "self-end", borderRadius: 3 }}
+        >
+          View
+        </Button>
+      </CardContent>
     </Card>
   );
 }
