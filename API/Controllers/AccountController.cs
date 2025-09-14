@@ -49,8 +49,6 @@ namespace API.Controllers
                 user.Id,
                 user.ImageUrl
             });
-
-
         }
 
 
