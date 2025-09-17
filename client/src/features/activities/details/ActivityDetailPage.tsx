@@ -11,6 +11,7 @@ function ActivityDetailPage() {
   const { activity, isLoadingActivity } = useActivities(id);
 
   if (isLoadingActivity) return <Typography>Loading ...</Typography>;
+  console.log("🚀 ~ ActivityDetailPage ~ activity:", activity)
   if (!activity) return <Typography>Activity not found ...</Typography>;
 
   return (
@@ -21,7 +22,7 @@ function ActivityDetailPage() {
         <ActivityDetailsChat />
       </Grid2>
       <Grid2 size={4}>
-        <ActivityDetailsSidebar />
+        <ActivityDetailsSidebar activity={activity}/>
       </Grid2>
     </Grid2>
   );

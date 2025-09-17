@@ -15,7 +15,7 @@ type Activity = {
   date: Date
   description: string
   category: string
-  isCancelled: boolean
+  isCanceled: boolean
   city: string
   venue: string
   latitude: number
