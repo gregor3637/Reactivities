@@ -16,7 +16,8 @@ namespace Application.Profiles.Commands
     {
         public class Command: IRequest<Results<Photo>>
         {
-            public required IFormFile File{ get; set; }
+            public required IFormFile File{ get; set; } // the name of the prop has to the same as the prop we are obtaining from the request. 
+            // i.e. in the request we need to have an object with name 'file'
         }
 
         public class Handler(IUserAccesser userAccesser, AppDbContext context,
